@@ -18462,10 +18462,10 @@ NKsAAAAASUVORK5CYII=
 <li>First two dimensions explain a total variance of 0.7068(0.4430 + 0.2638).</li>
 <li>Similarly, variance explained by first four components = 0.9311</li>
 <li>It is rather hard to interpret what the different components identified by PCA correspond to in the real world. But looking at the graphs, we could say that :<ul>
-<li><em>1st component</em> is trying to identify whether or not the sample point represents a <em>supermarket</em>(because of its peak data coming from <em>Milk</em>, <em>Grocery</em> and <em>Detergents_Paper</em> dimensions.</li>
-<li>Similarly, <em>2nd Component</em> could be trying to identify a <em>resturant</em></li>
-<li><em>3rd component</em>, could identify a <em>small markets or corner shops</em></li>
-<li><em>4th component</em>, is trying to identify <em>suppliers</em> or <em>bulk retailers</em>.</li>
+<li><em>1st component</em>  has large weights in <em>Milk</em>, <em>Grocery</em> and <em>Detergents_Paper</em> categories, it is trying to identify whether or not the sample point represents a <em>supermarket</em>, and since these categories have a negative weight, a lower value in the first component would indicate that the customer is closer to a supermarket.</li>
+<li>Similarly, <em>2nd Component</em> has large negative weights in <em>Fresh</em>, <em>Frozen</em> and <em>Delicatessen</em> categories, this indicates that a customer with lower values in 2nd dimension spends more in these three categories, so it could be trying to identify a <em>resturant</em>.</li>
+<li><em>3rd component</em>, could identify a <em>small markets or corner shops</em>. Here we have a large positive correlation with <em>Delicatessen</em> and <em>Frozen</em> and large negative correlation with <em>Fresh</em>. So, this component might be able to distinguish between stores that sell <em>Fresh</em> food(like green groceris) and <em>Delicatessen</em>(like packaged or processed food, bakery etc.). A sample with large positive score in the component would be a packaged food retailer, and a customer with large negative score would be a fruits and vegetables retailer. </li>
+<li><em>4th component</em>, is trying to identify <em>suppliers</em> or <em>bulk retailers</em>. Here <em>Frozen</em> has a large positive correlation and <em>Fresh</em>, <em>Delicatessen</em> have large negative correlation. This means that this component can distinguish between a bulk retailer of foods(e.g. a <em>fish</em>, <em>frozen meat</em> exporter with a large positive score) or a small resturant (e.g. a bakery or cafetaria serving <em>Freshly</em> prepared and also serving as a <em>Deli</em>).</li>
 </ul>
 </li>
 </ul>
@@ -21068,7 +21068,8 @@ SZuNMQ/E/VkAQDlRPhsAAABA2yEjBAAAAKDtEAgBAAAAaDsEQgAAAADaDoEQAAAAgLZDIAQAAACg
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>From the above computed tables and tit looks like <strong>Segment 0</strong> represents <strong>retailers and markets</strong> ranging from medium sized markets to supermarkets, while <strong>Segment 1</strong> could represent <strong>small convenience stores and green grocers or resturants</strong> .</p>
+<p>From the above computed tables it looks like <strong>Segment 0</strong> represents <strong>retailers and markets</strong> ranging from medium sized markets to supermarkets because of its large negative score in the first principal component. Comparing the cluster center  with the mean od complete data, it looks like it represents customers who spend more on <em>Grocery</em>, <em>Milk</em> and <em>Detergents_Paper</em> categories, stuff that you would pick up from a super-market.</p>
+<p><strong>Segment 1</strong> could represent <strong>small convenience stores and green grocers or resturants</strong> because if overall lower consumption than the average. Moreover, <em>Fresh</em>, <em>Frozen</em> and <em>Delicatessen</em> categories are very close to the average, which indicate that the functions as a nearby convenience store or a small resturant more often that it functions as a market serving <em>Groceries</em>.</p>
 
 </div>
 </div>
