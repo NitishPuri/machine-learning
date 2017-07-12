@@ -19,15 +19,37 @@ class LearningAgent(Agent):
         self.epsilon = epsilon   # Random exploration factor
         self.alpha = alpha       # Learning factor
 
-        logger.debug("learning={}, epsilo={}, alpha={}".format(learning, epsilon, alpha))
-
-        ###########
-        ## TO DO ##
-        ###########
         # Set any additional class parameters as needed
+        self.t = 0
 
     def decay(self):
-        self.epsilon = self.epsilon - 0.01
+
+        self.t += 1
+
+        # Attempt 2
+        # Linear decay
+        # decay_rate = 0.01
+        # self.epsilon = self.epsilon - decay_rate   
+
+        # Attempt 3
+        # Geometric decay
+        # decay_rate = 0.98
+        # self.epsilon = decay_rate**self.t
+
+        # Attempt 4
+        # Inverse squared decay
+        # self.epsilon = 1/self.t**2
+
+        # Attempt 5
+        # Exponential decay
+        # decay_rate = 0.01
+        # self.epsilon = math.exp(-1*decay_rate*self.t)
+
+        # Attemp 6
+        # Cosine decay
+        decay_rate = 0.01
+        self.epsilon = math.cos(decay_rate*self.t)
+
 
     def reset(self, destination=None, testing=False):
         """ The reset function is called at the beginning of each trial.
@@ -37,20 +59,15 @@ class LearningAgent(Agent):
         # Select the destination as the new location to route to
         self.planner.route_to(destination)
 
-        logger.debug("destination={}, testing={}".format(destination, testing))
-
-        ########### 
-        ## TO DO ##
-        ###########
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
 
-        self.decay()
-
-        if(testing is True):
+        if testing:
             self.epsilon = 0
             self.alpha = 0
+        else:
+            self.decay()
 
         return None
 
@@ -58,8 +75,6 @@ class LearningAgent(Agent):
         """ The build_state function is called when the agent requests data from the 
             environment. The next waypoint, the intersection inputs, and the deadline 
             are all features available to the agent. """
-
-        logger.debug("")
 
         # Collect data about the environment
         waypoint = self.planner.next_waypoint() # The next waypoint 
@@ -80,12 +95,17 @@ class LearningAgent(Agent):
         # Calculate the maximum Q-value of all actions for a given state
 
         maxQ = None
+        action = None
+        actions = []
 
         state_actions = self.Q.get(state)
         if state_actions is not None:
             maxQ = max(state_actions.values())
+            actions = [action for action in state_actions if state_actions[action] == maxQ ]
 
-        return maxQ 
+        action = random.choice(actions)
+
+        return maxQ, action
 
 
     def createQ(self, state):
@@ -97,14 +117,7 @@ class LearningAgent(Agent):
 
         if(self.learning is True):
             if(state not in self.Q):
-                logger.debug("Adding state {} to Q".format(state))
-
-                state_dict = {}
-
-                for action in self.valid_actions:
-                    state_dict[action] = 0.0
-
-                self.Q[state] = state_dict
+                self.Q[state] = dict((k, 0.0) for k in self.valid_actions)
 
         return
 
@@ -125,13 +138,11 @@ class LearningAgent(Agent):
         if(self.learning is not True):
             action = random.choice(self.valid_actions)
         else:
-            if(random.random() < self.epsilon):
+            if(random.random() < self.epsilon):         # explore
                 action = random.choice(self.valid_actions)
-            else:
-                state_actions = self.Q.get(state)
-                if state_actions is not None:
-                    action = max(state_actions.iterkeys(), key = (lambda k : state_actions[k]) )
-
+            else:                                       # exploit
+                maxQ, maxQ_action = self.get_maxQ(state)
+                action = maxQ_action
 
         return action
 
@@ -142,9 +153,6 @@ class LearningAgent(Agent):
             receives an award. This function does not consider future rewards 
             when conducting learning. """
 
-        ########### 
-        ## TO DO ##
-        ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
 
@@ -163,7 +171,6 @@ class LearningAgent(Agent):
             environment for a given trial. This function will build the agent
             state, choose an action, receive a reward, and learn if enabled. """
 
-        logger.debug("")
         state = self.build_state()          # Get current state
         self.createQ(state)                 # Create 'state' in Q-table
         action = self.choose_action(state)  # Choose an action
@@ -209,23 +216,17 @@ def run():
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
     # sim = Simulator(env)
-    sim = Simulator(env, update_delay=0.01, log_metrics=True, display=False)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, optimized=True, display=False)
     
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run()
-    # sim.run(n_test=10)
+    # sim.run()
+    sim.run(n_test=10)
 
 
 if __name__ == '__main__':
-
-    import logging
-    logger = logging.getLogger('root')
-    FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
-    logging.basicConfig(format=FORMAT)
-    logger.setLevel(logging.DEBUG)
 
     run()
