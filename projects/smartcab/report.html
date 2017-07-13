@@ -16336,7 +16336,7 @@ I actually used several different functions for the decay, and it seems all of t
 </li>
 <li><div class="highlight"><pre><span></span><span class="p">(</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 <span class="o">--</span> <span class="n">forward</span> <span class="p">:</span> <span class="mf">0.00</span>
-<span class="o">--</span> <span class="n">right</span> <span class="p">:</span> <span class="mf">0.13</span>       <span class="c1"># Optimal policy since right of way is open and there is no traffic coming in from right. </span>
+<span class="o">--</span> <span class="n">right</span> <span class="p">:</span> <span class="mf">0.13</span>       <span class="c1"># Optimal policy since right of way is open and there is no traffic coming forward from left. </span>
 <span class="o">--</span> <span class="bp">None</span> <span class="p">:</span> <span class="mf">0.00</span>
 <span class="o">--</span> <span class="n">left</span> <span class="p">:</span> <span class="o">-</span><span class="mf">20.30</span>
 </pre></div>
@@ -16349,6 +16349,9 @@ I actually used several different functions for the decay, and it seems all of t
  <span class="o">--</span> <span class="bp">None</span> <span class="p">:</span> <span class="mf">0.00</span>
  <span class="o">--</span> <span class="n">left</span> <span class="p">:</span> <span class="o">-</span><span class="mf">10.43</span>
 </pre></div>
+<ul>
+<li>I tried to look for states that have not converged to an optimal policy, however was unable to find such a state. There are more examples of states where the agent has given preference to some particular policy, where the optimal policy would be ambigous. I guess a more exhaustive search could definitely result in such a policy, but manually testing random states has not yet resulted in any luck. Maybe we can formulate the rules in the form of a graph(similar to a decision tree) and test our Q-table if it matches the results of the decision tree. We could reuse the <code>Environment.act()</code> function as such a decision tree and sweep it over our Q-table to identify states that do not perform optimally. </li>
+</ul>
 
 </div>
 </div>
