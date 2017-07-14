@@ -16344,14 +16344,23 @@ I actually used several different functions for the decay, and it seems all of t
 <li></li>
 </ul>
 <div class="highlight"><pre><span></span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">,</span> <span class="s1">&#39;forward&#39;</span><span class="p">)</span>
- <span class="o">--</span> <span class="n">forward</span> <span class="p">:</span> <span class="mf">0.74</span>   <span class="c1"># forward and right, both are optimal in this case as they focus on security, </span>
- <span class="o">--</span> <span class="n">right</span> <span class="p">:</span> <span class="mf">0.56</span>    <span class="c1"># the agent somehow learned that forward is more optimal.</span>
+ <span class="o">--</span> <span class="n">forward</span> <span class="p">:</span> <span class="mf">0.74</span>   <span class="c1">#  optimal</span>
+ <span class="o">--</span> <span class="n">right</span> <span class="p">:</span> <span class="mf">0.56</span>    
  <span class="o">--</span> <span class="bp">None</span> <span class="p">:</span> <span class="mf">0.00</span>
  <span class="o">--</span> <span class="n">left</span> <span class="p">:</span> <span class="o">-</span><span class="mf">10.43</span>
 </pre></div>
+<p>Forward and right, both are focus on security. However going right would definitely take the farther agent away from the destination, so <code>forward</code> is optimal.</p>
+<p><strong>An example of a sub-optimal policy,</strong></p>
 <ul>
-<li>I tried to look for states that have not converged to an optimal policy, however was unable to find such a state. There are more examples of states where the agent has given preference to some particular policy, where the optimal policy would be ambigous. I guess a more exhaustive search could definitely result in such a policy, but manually testing random states has not yet resulted in any luck. Maybe we can formulate the rules in the form of a graph(similar to a decision tree) and test our Q-table if it matches the results of the decision tree. We could reuse the <code>Environment.act()</code> function as such a decision tree and sweep it over our Q-table to identify states that do not perform optimally. </li>
+<li></li>
 </ul>
+
+<pre><code>('forward', 'green', 'left', 'forward', 'left')
+ -- forward : 0.00     # This should be the optimal policy
+ -- right : 0.00
+ -- None : 1.00
+ -- left : 0.00</code></pre>
+<p>This is definitely not optimal, as the agent could have received a positive reward (higher than 1.0) if it would have explored the <code>forward</code> action. This shows that there are states still that have not been explored properly. Maybe if we use a still slower epsilon decay with number of iterations reaching ~200, we might be able to explore such states.</p>
 
 </div>
 </div>
