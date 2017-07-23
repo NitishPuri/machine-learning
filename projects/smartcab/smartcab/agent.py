@@ -150,7 +150,7 @@ class LearningAgent(Agent):
 
     def learn(self, state, action, reward):
         """ The learn function is called after the agent completes an action and
-            receives an award. This function does not consider future rewards 
+            receives a reward. This function does not consider future rewards 
             when conducting learning. """
 
         # When learning, implement the value iteration update rule
